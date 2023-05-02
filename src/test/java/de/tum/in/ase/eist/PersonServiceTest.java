@@ -61,7 +61,7 @@ class PersonServiceTest {
         child.setBirthday(LocalDate.MIN);
         parent.setFirstName("C");
         parent.setLastName("D");
-        parent.setBirthday(LocalDate.MAX);
+        parent.setBirthday(LocalDate.now());
         child=personService.save(child);
         parent=personService.save(parent);
         assertEquals(child, personService.addParent(child, parent));
@@ -76,11 +76,11 @@ class PersonServiceTest {
         var parent1=new Person();
         var parent2=new Person();
         var parent3=new Person();
-        child.setFirstName("A");
-        child.setLastName("B");
+        child.setFirstName("I");
+        child.setLastName("J");
         child.setBirthday(LocalDate.MIN);
-        parent1.setFirstName("C");
-        parent1.setLastName("D");
+        parent1.setFirstName("K");
+        parent1.setLastName("L");
         parent1.setBirthday(LocalDate.now());
         parent2.setFirstName("E");
         parent2.setLastName("F");

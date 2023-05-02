@@ -88,11 +88,11 @@ class PersonServiceTest {
         parent3.setFirstName("G");
         parent3.setLastName("H");
         parent3.setBirthday(LocalDate.now());
-        /*
         child=personService.save(child);
         parent1=personService.save(parent1);
         parent2=personService.save(parent2);
         parent3=personService.save(parent3);
+        /*
         assertEquals(child, personService.addParent(child, parent1));
         assertEquals(child, personService.addParent(child, parent2));
         assertEquals(4, personRepository.findAll().size());

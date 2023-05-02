@@ -74,4 +74,46 @@ class PersonIntegrationTest {
     }
 
     // TODO: Add more test cases here
+    @Test
+    void testAddParents() throws Exception{
+        Person child=new Person();
+        Person parent=new Person();
+        child.setFirstName("A");
+        child.setLastName("B");
+        child.setBirthday(LocalDate.MIN);
+        parent.setFirstName("C");
+        parent.setLastName("D");
+        parent.setBirthday(LocalDate.now());
+
+        var response = this.mvc.perform(
+                post("/persons")
+                        .content(objectMapper.writeValueAsString(child))
+                        .contentType("application/json")
+        ).andReturn().getResponse();
+
+        var response1 = this.mvc.perform(
+                post("/persons")
+                        .content(objectMapper.writeValueAsString(parent))
+                        .contentType("application/json")
+        ).andReturn().getResponse();
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals(HttpStatus.OK.value(), response1.getStatus());
+
+        var response2 = this.mvc.perform(
+                put("/persons/"+child.getId()+"/parents")
+                        .content(objectMapper.writeValueAsString(child))
+                        .contentType("application/json")
+        ).andReturn().getResponse();
+        Person updatedChild = objectMapper.readValue(response2.getContentAsString(), Person.class);
+        assertEquals(child, updatedChild);
+        assertEquals(2, personRepository.findAll().size());
+        assertTrue(personRepository.existsById(child.getId()));
+        assertTrue(personRepository.existsById(parent.getId()));
+        assertTrue(child.getParents().contains(parent));
+    }
+
+    @Test
+    void testAddThreeParents() {
+
+    }
 }

@@ -75,7 +75,7 @@ class PersonIntegrationTest {
 
     // TODO: Add more test cases here
     @Test
-    void testAddParents() throws Exception{
+    void testAddParent() throws Exception{
         Person child=new Person();
         Person parent=new Person();
         child.setFirstName("A");

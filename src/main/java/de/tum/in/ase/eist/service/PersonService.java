@@ -45,12 +45,11 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set=person.getParents();
-        if (set.size()>2) {
+        if (set.size()>=2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.add(parent);
-        personRepository.save(person);
-        return person;
+        return save(person);
     }
 
     public Person addChild(Person person, Person child) {
@@ -59,10 +58,12 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> childParents=child.getParents();
-        throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        //Set<Person> set1=person.getChildren();
-        //set1.add(child);
-        //return person;
+        if (childParents.size()>=2) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        Set<Person> set1=person.getChildren();
+        set1.add(child);
+        return save(person);
     }
 
     public Person removeParent(Person person, Person parent) {
@@ -71,11 +72,11 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set=person.getParents();
-        if (set.size()<1) {
+        if (set.size()<=1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.remove(parent);
-        return person;
+        return save(person);
     }
 
     public Person removeChild(Person person, Person child) {
@@ -84,10 +85,10 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set=person.getChildren();
-        if (set.size()<1) {
+        if (set.size()<=1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.remove(child);
-        return person;
+        return save(person);
     }
 }

@@ -72,7 +72,7 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set=person.getParents();
-        if (set.size()<=1) {
+        if (set.size()<1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.remove(parent);
@@ -85,7 +85,7 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set=person.getChildren();
-        if (set.size()<=1) {
+        if (set.size()<1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.remove(child);

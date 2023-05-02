@@ -59,12 +59,10 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> childParents=child.getParents();
-        if (childParents.size()>2) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
-        }
-        Set<Person> set1=person.getChildren();
-        set1.add(child);
-        return person;
+        throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        //Set<Person> set1=person.getChildren();
+        //set1.add(child);
+        //return person;
     }
 
     public Person removeParent(Person person, Person parent) {

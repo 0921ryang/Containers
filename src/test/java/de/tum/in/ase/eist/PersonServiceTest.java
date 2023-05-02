@@ -35,6 +35,30 @@ class PersonServiceTest {
         personService.save(person);
 
         assertEquals(1, personRepository.findAll().size());
+
+        var child = new Person();
+        child.setFirstName("A");
+        child.setLastName("B");
+        child.setBirthday(LocalDate.MIN);
+        Person child1=personService.addParent(child,person);
+        assertEquals(2, personRepository.findAll().size());
+        boolean flag=false;
+        boolean flag1=false;
+        for (Person i: personRepository.findAll()) {
+            if (i==person&&!flag) {
+                flag=true;
+            } else if (i==person) {
+                flag=false;
+            }
+            if (i==child1&&!flag1) {
+                flag1=true;
+            } else if (i==child1){
+                flag=false;
+            }
+        }
+        assertTrue(flag);
+        assertTrue(flag1);
+        assertTrue(child1.getParents().contains(person));
     }
 
     @Test
@@ -52,4 +76,16 @@ class PersonServiceTest {
     }
 
     // TODO: Add more test cases here
+    @Test
+    void testAddThreePerson() {
+        var child=new Person();
+        var parent1=new Person();
+        var parent2=new Person();
+        var parent3=new Person();
+        child=personRepository.save(child);
+        parent1=personRepository.save(parent1);
+        parent2=personRepository.save(parent2);
+        parent3=personRepository.save(parent3);
+
+    }
 }

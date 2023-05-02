@@ -3,12 +3,14 @@ package de.tum.in.ase.eist.service;
 import de.tum.in.ase.eist.model.Person;
 import de.tum.in.ase.eist.repository.PersonRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PersonService {
@@ -39,21 +41,55 @@ public class PersonService {
 
     public Person addParent(Person person, Person parent) {
         // TODO: Implement
-        return null;
+        if (person==null||parent==null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        Set<Person> set=person.getParents();
+        if (set.size()>2) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        set.add(parent);
+        personRepository.save(person);
+        return person;
     }
 
     public Person addChild(Person person, Person child) {
         // TODO: Implement
-        return null;
+        if (person==null||child==null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        Set<Person> set=child.getParents();
+        if (set.size()>2) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        Set<Person> set1=person.getChildren();
+        set1.add(child);
+        return person;
     }
 
     public Person removeParent(Person person, Person parent) {
         // TODO: Implement
-        return null;
+        if (person==null||parent==null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        Set<Person> set=person.getParents();
+        if (set.size()<1) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        set.remove(parent);
+        return person;
     }
 
     public Person removeChild(Person person, Person child) {
         // TODO: Implement
-        return null;
+        if (person==null||child==null) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        Set<Person> set=person.getChildren();
+        if (set.size()<1) {
+            throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+        }
+        set.remove(child);
+        return person;
     }
 }

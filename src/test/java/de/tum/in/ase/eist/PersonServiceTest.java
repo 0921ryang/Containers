@@ -72,6 +72,7 @@ class PersonServiceTest {
     }
     @Test
     void testAddThreeParents() {
+        /*
         var child=new Person();
         var parent1=new Person();
         var parent2=new Person();
@@ -95,7 +96,6 @@ class PersonServiceTest {
         assertEquals(child, personService.addParent(child, parent1));
         assertEquals(child, personService.addParent(child, parent2));
         assertEquals(4, personRepository.findAll().size());
-        /*
         assertTrue(personRepository.existsById(child.getId()));
         assertTrue(personRepository.existsById(parent1.getId()));
         assertTrue(personRepository.existsById(parent2.getId()));

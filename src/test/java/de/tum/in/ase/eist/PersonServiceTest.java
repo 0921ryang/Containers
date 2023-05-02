@@ -72,7 +72,6 @@ class PersonServiceTest {
     }
     @Test
     void testAddThreeParents() {
-        /*
         var child=new Person();
         var parent1=new Person();
         var parent2=new Person();
@@ -89,6 +88,7 @@ class PersonServiceTest {
         parent3.setFirstName("G");
         parent3.setLastName("H");
         parent3.setBirthday(LocalDate.now());
+        /*
         child=personService.save(child);
         parent1=personService.save(parent1);
         parent2=personService.save(parent2);

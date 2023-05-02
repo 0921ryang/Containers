@@ -58,8 +58,8 @@ public class PersonService {
         if (person==null||child==null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set=child.getParents();
-        if (set.size()>2) {
+        Set<Person> childParents=child.getParents();
+        if (childParents.size()>2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set1=person.getChildren();

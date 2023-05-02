@@ -56,6 +56,12 @@ class PersonServiceTest {
     void testAddParent() {
         Person child=new Person();
         Person parent=new Person();
+        child.setFirstName("A");
+        child.setLastName("B");
+        child.setBirthday(LocalDate.MIN);
+        parent.setFirstName("C");
+        parent.setLastName("D");
+        parent.setBirthday(LocalDate.MAX);
         child=personService.save(child);
         parent=personService.save(parent);
         assertEquals(child, personService.addParent(child, parent));
@@ -70,6 +76,18 @@ class PersonServiceTest {
         var parent1=new Person();
         var parent2=new Person();
         var parent3=new Person();
+        child.setFirstName("A");
+        child.setLastName("B");
+        child.setBirthday(LocalDate.MIN);
+        parent1.setFirstName("C");
+        parent1.setLastName("D");
+        parent1.setBirthday(LocalDate.now());
+        parent2.setFirstName("E");
+        parent2.setLastName("F");
+        parent2.setBirthday(LocalDate.now());
+        parent3.setFirstName("G");
+        parent3.setLastName("H");
+        parent3.setBirthday(LocalDate.now());
         child=personService.save(child);
         parent1=personService.save(parent1);
         parent2=personService.save(parent2);

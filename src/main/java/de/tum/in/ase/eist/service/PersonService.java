@@ -48,7 +48,7 @@ public class PersonService {
         }
 
         //get the right to access parents
-        Set<Person> set=personRepository.findWithParentsById(person.getId()).get().getParents();
+        Set<Person> set=person.getParents();
         if (set.size()>=2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }

@@ -1,5 +1,5 @@
 @REM # Shut off all the containers
-
+call docker compose down
 
 @REM # Remove the spring application image
 

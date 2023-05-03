@@ -3,6 +3,8 @@ package de.tum.in.ase.eist;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.tum.in.ase.eist.model.Person;
 import de.tum.in.ase.eist.repository.PersonRepository;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +78,6 @@ class PersonIntegrationTest {
     // TODO: Add more test cases here
     @Test
     void testAddParent() throws Exception{
-        /*
         Person child=new Person();
         Person parent=new Person();
         child.setFirstName("A");
@@ -84,7 +85,8 @@ class PersonIntegrationTest {
         child.setBirthday(LocalDate.MIN);
         parent.setFirstName("C");
         parent.setLastName("D");
-        parent.setBirthday(LocalDate.now());
+        LocalDate localDate=LocalDate.now();
+        parent.setBirthday(localDate);
 
         var response = this.mvc.perform(
                 post("/persons")
@@ -100,18 +102,34 @@ class PersonIntegrationTest {
         assertEquals(HttpStatus.OK.value(), response.getStatus());
         assertEquals(HttpStatus.OK.value(), response1.getStatus());
 
+        String responseBody = response.getContentAsString();
+        JSONObject responseJson = new JSONObject(responseBody);
+        Long id = responseJson.getLong("id");
+
+        String responseBody1 = response1.getContentAsString();
+        JSONObject responseJson1 = new JSONObject(responseBody1);
+        Long id1 = responseJson1.getLong("id");
         var response2 = this.mvc.perform(
-                put("/persons/"+child.getId()+"/parents")
-                        .content(objectMapper.writeValueAsString(child))
+                put("/persons/"+id+"/parents")
+                        .content(objectMapper.writeValueAsString(parent))
                         .contentType("application/json")
         ).andReturn().getResponse();
-        Person updatedChild = objectMapper.readValue(response2.getContentAsString(), Person.class);
-        assertEquals(child, updatedChild);
+
+        assertEquals(HttpStatus.OK.value(), response2.getStatus());
         assertEquals(2, personRepository.findAll().size());
-        assertTrue(personRepository.existsById(child.getId()));
-        assertTrue(personRepository.existsById(parent.getId()));
-        assertTrue(child.getParents().contains(parent));
-        */
+        assertTrue(personRepository.existsById(id));
+        assertTrue(personRepository.existsById(id1));
+
+        String responseBody2 = response2.getContentAsString();
+        JSONObject responseJson2 = new JSONObject(responseBody2);
+        JSONArray parentsJson = responseJson2.getJSONArray("parents");
+        JSONObject parentJson = parentsJson.getJSONObject(0);
+        String firstName = parentJson.getString("firstName");
+        String lastName = parentJson.getString("lastName");
+        LocalDate birthday = LocalDate.parse(parentJson.getString("birthday"));
+        assertEquals("C", firstName);
+        assertEquals("D", lastName);
+        assertEquals(localDate, birthday);
     }
 
     @Test

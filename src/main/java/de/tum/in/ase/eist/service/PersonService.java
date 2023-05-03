@@ -67,7 +67,11 @@ public class PersonService {
         }
         Set<Person> set1=person.getChildren();
         set1.add(child);
-        return save(person);
+        if (personRepository.existsById(person.getId())) {
+            return person;
+        } else {
+            return save(person);
+        }
     }
 
     public Person removeParent(Person person, Person parent) {
@@ -80,7 +84,11 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.remove(parent);
-        return save(person);
+        if (personRepository.existsById(person.getId())) {
+            return person;
+        } else {
+            return save(person);
+        }
     }
 
     public Person removeChild(Person person, Person child) {
@@ -97,6 +105,10 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.remove(child);
-        return save(person);
+        if (personRepository.existsById(person.getId())) {
+            return person;
+        } else {
+            return save(person);
+        }
     }
 }

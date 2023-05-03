@@ -49,7 +49,7 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         set.add(parent);
-        return save(person);
+        return person;
     }
 
     public Person addChild(Person person, Person child) {

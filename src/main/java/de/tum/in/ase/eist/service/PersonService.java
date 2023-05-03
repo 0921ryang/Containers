@@ -46,12 +46,7 @@ public class PersonService {
         if (person == null || parent ==null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if (person.getId() == null || personRepository.findWithParentsById(person.getId()).isEmpty()) {
-            save(person);//exist person, but not saved
-        }
-        if (parent.getId() == null || personRepository.findById(parent.getId()).isEmpty()) {
-            save(parent);//exist person, but not saved
-        }
+
         //get the right to access parents
         Set<Person> set=personRepository.findWithParentsById(person.getId()).get().getParents();
         if (set.size()>=2) {

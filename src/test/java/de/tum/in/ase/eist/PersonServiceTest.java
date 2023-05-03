@@ -93,8 +93,7 @@ class PersonServiceTest {
         parent2=personService.save(parent2);
         parent3=personService.save(parent3);
         assertEquals(child, personService.addParent(child, parent1));
-        Person newP=personService.addParent(child, parent2);
-
+        assertEquals(child, personService.addParent(child, parent2));
         assertEquals(4, personRepository.findAll().size());
         assertTrue(personRepository.existsById(child.getId()));
         assertTrue(personRepository.existsById(parent1.getId()));

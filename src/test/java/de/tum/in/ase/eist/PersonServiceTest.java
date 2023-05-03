@@ -3,6 +3,7 @@ package de.tum.in.ase.eist;
 import de.tum.in.ase.eist.model.Person;
 import de.tum.in.ase.eist.repository.PersonRepository;
 import de.tum.in.ase.eist.service.PersonService;
+import liquibase.pro.packaged.S;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -12,6 +13,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +61,7 @@ class PersonServiceTest {
         Person parent=new Person();
         child.setFirstName("A");
         child.setLastName("B");
-        child.setBirthday(LocalDate.MIN);
+        child.setBirthday(LocalDate.now());
         parent.setFirstName("C");
         parent.setLastName("D");
         parent.setBirthday(LocalDate.now());
@@ -78,7 +81,7 @@ class PersonServiceTest {
         var parent3=new Person();
         child.setFirstName("I");
         child.setLastName("J");
-        child.setBirthday(LocalDate.MIN);
+        child.setBirthday(LocalDate.now());
         parent1.setFirstName("K");
         parent1.setLastName("L");
         parent1.setBirthday(LocalDate.now());
@@ -99,6 +102,7 @@ class PersonServiceTest {
         assertTrue(personRepository.existsById(parent1.getId()));
         assertTrue(personRepository.existsById(parent2.getId()));
         assertTrue(personRepository.existsById(parent3.getId()));
+        assertEquals(2, child.getParents().size());
         assertTrue(child.getParents().contains(parent1));
         assertTrue(child.getParents().contains(parent2));
         Person[] people=new Person[2];

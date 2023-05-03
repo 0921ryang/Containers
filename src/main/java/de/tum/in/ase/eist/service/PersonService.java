@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -41,74 +42,95 @@ public class PersonService {
 
     public Person addParent(Person person, Person parent) {
         // TODO: Implement
-        if (person==null||parent==null) {
+        //eliminate null object and not saved object, which doesn't have Id
+        if (person == null || parent ==null || person.getId() == null || parent.getId() == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set=person.getParents();
+        if (personRepository.findWithParentsById(person.getId()).isEmpty()) {
+            save(person);//exist person, but not saved
+        }
+        if (personRepository.findById(parent.getId()).isEmpty()) {
+            save(person);//exist person, but not saved
+        }
+        //get the right to access parents
+        Set<Person> set=personRepository.findWithParentsById(person.getId()).get().getParents();
         if (set.size()>=2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        set.add(parent);
-        if (personRepository.existsById(person.getId())) {
-            return person;
-        } else {
-            return save(person);
-        }
+        Set<Person> set1=new HashSet<>(set);
+        set1.add(parent);
+        person.setParents(set1);
+        return save(person);
     }
 
     public Person addChild(Person person, Person child) {
         // TODO: Implement
-        if (person==null||child==null) {
+        if (person == null || child == null || person.getId() == null || child.getId() == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> childParents=child.getParents();
-        if (childParents.size()>=2) {
+        if (personRepository.findWithParentsById(child.getId()).isEmpty()) {
+            save(child);
+        }
+        Set<Person> set=personRepository.findWithParentsById(child.getId()).get().getParents();
+        if (set.size()>2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set1=person.getChildren();
-        set1.add(child);
-        if (personRepository.existsById(person.getId())) {
-            return person;
-        } else {
-            return save(person);
+        if (personRepository.findWithChildrenById(person.getId()).isEmpty()) {
+            save(person);
         }
+        Set<Person> set1=personRepository.findWithChildrenById(person.getId()).get().getChildren();
+        Set<Person> set2= new HashSet<>(set1);
+        set2.add(child);
+        person.setChildren(set2);
+        return save(person);
     }
 
     public Person removeParent(Person person, Person parent) {
         // TODO: Implement
-        if (person==null||parent==null) {
+        if (person == null || parent == null || person.getId() == null || parent.getId() == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set=person.getParents();
-        if (set.size()!=2) {
+        if (personRepository.findWithParentsById(person.getId()).isEmpty()) {
+            save(person);
+        }
+        if (personRepository.findWithParentsById(parent.getId()).isEmpty()) {
+            save(parent);
+        }
+        Set<Person> set=personRepository.findWithParentsById(person.getId()).get().getParents();
+        if (set.size() != 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        set.remove(parent);
-        if (personRepository.existsById(person.getId())) {
-            return person;
-        } else {
-            return save(person);
-        }
+        Set<Person> set1 = new HashSet<>(set);
+        set1.remove(parent);
+        person.setParents(set1);
+        return save(person);
     }
 
     public Person removeChild(Person person, Person child) {
         // TODO: Implement
-        if (person==null||child==null) {
+        if (person == null || child == null || person.getId() == null || child.getId() == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set=person.getChildren();
+        if (personRepository.findWithChildrenById(person.getId()).isEmpty()) {
+            save(person);
+        }
+        if (personRepository.findWithChildrenById(child.getId()).isEmpty()) {
+            save(child);
+        }
+        Set<Person> set=personRepository.findWithChildrenById(person.getId()).get().getChildren();
         if (set.size()<1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set2=child.getParents();
-        if (set2.size()!=2) {
+        if (personRepository.findWithParentsById(child.getId()).isEmpty()) {
+            save(person);
+        }
+        Set<Person> set2=personRepository.findWithParentsById(child.getId()).get().getParents();
+        if (set2.size() != 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        set.remove(child);
-        if (personRepository.existsById(person.getId())) {
-            return person;
-        } else {
-            return save(person);
-        }
+        Set<Person> set1 = new HashSet<>(set);
+        set1.remove(child);
+        person.setChildren(set1);
+        return person;
     }
 }

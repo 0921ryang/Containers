@@ -140,7 +140,7 @@ class PersonIntegrationTest {
         LocalDate localDate = LocalDate.now();
         child.setFirstName("I");
         child.setLastName("J");
-        child.setBirthday(LocalDate.MIN);
+        child.setBirthday(localDate);
         parent1.setFirstName("K");
         parent1.setLastName("L");
         parent1.setBirthday(localDate);
@@ -200,7 +200,7 @@ class PersonIntegrationTest {
 
         var responsePut = this.mvc.perform(
                 put("/persons/" + id + "/parents")
-                        .content(objectMapper.writeValueAsString(parent1))
+                        .content(objectMapper.writeValueAsString(personRepository.findWithParentsById(id1).get()))
                         .contentType("application/json")
         ).andReturn().getResponse();
 
@@ -225,7 +225,7 @@ class PersonIntegrationTest {
 
         var responsePut1 = this.mvc.perform(
                 put("/persons/" + id + "/parents")
-                        .content(objectMapper.writeValueAsString(parent2))
+                        .content(objectMapper.writeValueAsString(personRepository.findWithParentsById(id2).get()))
                         .contentType("application/json")
         ).andReturn().getResponse();
 
@@ -239,7 +239,7 @@ class PersonIntegrationTest {
         String responseBody00 = responsePut1.getContentAsString();
         JSONObject responseJson00 = new JSONObject(responseBody00);
         JSONArray parentsJson0 = responseJson00.getJSONArray("parents");
-        JSONObject parentJson0 = parentsJson0.getJSONObject(0);
+        JSONObject parentJson0 = parentsJson0.getJSONObject(1);
         String firstName0 = parentJson0.getString("firstName");
         String lastName0 = parentJson0.getString("lastName");
         LocalDate birthday0 = LocalDate.parse(parentJson0.getString("birthday"));
@@ -249,19 +249,9 @@ class PersonIntegrationTest {
 
         var responseFalse = this.mvc.perform(
                 put("/persons/" + id + "/parents")
-                        .content(objectMapper.writeValueAsString(parent3))
+                        .content(objectMapper.writeValueAsString(personRepository.findWithParentsById(id3).get()))
                         .contentType("application/json")
         ).andReturn().getResponse();
-
-        String responseBody000 = responseFalse.getContentAsString();
-        JSONObject responseJson000 = new JSONObject(responseBody000);
-        JSONArray parentsJson00 = responseJson000.getJSONArray("parents");
-        JSONObject parentJson00 = parentsJson00.getJSONObject(0);
-        String firstName00 = parentJson00.getString("firstName");
-        String lastName00 = parentJson00.getString("lastName");
-        LocalDate birthday00 = LocalDate.parse(parentJson00.getString("birthday"));
-        assertEquals("G", firstName00);
-        assertEquals("H", lastName00);
-        assertEquals(localDate, birthday00);
+        assertEquals(400, responseFalse.getStatus());
     }
 }

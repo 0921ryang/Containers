@@ -42,8 +42,8 @@ public class PersonService {
 
     public Person addParent(Person person, Person parent) {
         // TODO: Implement
-        //eliminate null object and not saved object, which doesn't have Id
-        if (person == null || parent ==null || person.getId() == null || parent.getId() == null) {
+        //eliminate null object
+        if (person == null || parent ==null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         if (personRepository.findWithParentsById(person.getId()).isEmpty()) {
@@ -65,7 +65,7 @@ public class PersonService {
 
     public Person addChild(Person person, Person child) {
         // TODO: Implement
-        if (person == null || child == null || person.getId() == null || child.getId() == null) {
+        if (person == null || child == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         if (personRepository.findWithParentsById(child.getId()).isEmpty()) {
@@ -87,7 +87,7 @@ public class PersonService {
 
     public Person removeParent(Person person, Person parent) {
         // TODO: Implement
-        if (person == null || parent == null || person.getId() == null || parent.getId() == null) {
+        if (person == null || parent == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         if (personRepository.findWithParentsById(person.getId()).isEmpty()) {
@@ -108,7 +108,7 @@ public class PersonService {
 
     public Person removeChild(Person person, Person child) {
         // TODO: Implement
-        if (person == null || child == null || person.getId() == null || child.getId() == null) {
+        if (person == null || child == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         if (personRepository.findWithChildrenById(person.getId()).isEmpty()) {

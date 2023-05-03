@@ -81,10 +81,10 @@ class PersonIntegrationTest {
         Person parent=new Person();
         child.setFirstName("A");
         child.setLastName("B");
-        child.setBirthday(LocalDate.MIN);
+        LocalDate localDate=LocalDate.now();
+        child.setBirthday(localDate);
         parent.setFirstName("C");
         parent.setLastName("D");
-        LocalDate localDate=LocalDate.now();
         parent.setBirthday(localDate);
 
         var response = this.mvc.perform(

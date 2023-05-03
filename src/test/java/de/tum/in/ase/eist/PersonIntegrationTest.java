@@ -110,7 +110,7 @@ class PersonIntegrationTest {
         Long id1 = responseJson1.getLong("id");
         var response2 = this.mvc.perform(
                 put("/persons/" + id + "/parents")
-                        .content(objectMapper.writeValueAsString(parent))
+                        .content(objectMapper.writeValueAsString(personRepository.findWithParentsById(id1).get()))
                         .contentType("application/json")
         ).andReturn().getResponse();
 

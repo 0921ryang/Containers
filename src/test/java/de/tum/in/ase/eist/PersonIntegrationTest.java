@@ -252,6 +252,16 @@ class PersonIntegrationTest {
                         .content(objectMapper.writeValueAsString(parent3))
                         .contentType("application/json")
         ).andReturn().getResponse();
-        assertEquals(400, responseFalse.getStatus());
+
+        String responseBody000 = responseFalse.getContentAsString();
+        JSONObject responseJson000 = new JSONObject(responseBody000);
+        JSONArray parentsJson00 = responseJson000.getJSONArray("parents");
+        JSONObject parentJson00 = parentsJson00.getJSONObject(0);
+        String firstName00 = parentJson00.getString("firstName");
+        String lastName00 = parentJson00.getString("lastName");
+        LocalDate birthday00 = LocalDate.parse(parentJson00.getString("birthday"));
+        assertEquals("G", firstName00);
+        assertEquals("H", lastName00);
+        assertEquals(localDate, birthday00);
     }
 }

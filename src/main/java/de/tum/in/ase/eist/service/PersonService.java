@@ -97,7 +97,6 @@ public class PersonService {
         if (set.size() < 1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        personRepository.findAll();
         Set<Person> set2=child.getParents();
         if (set2.size() != 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));

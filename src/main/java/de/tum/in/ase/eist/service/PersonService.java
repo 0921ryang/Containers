@@ -46,10 +46,9 @@ public class PersonService {
         if (person == null || parent ==null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-
         //get the right to access parents
         Set<Person> set=person.getParents();
-        if (set.size()>=2) {
+        if (set.size() >= 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set1=new HashSet<>(set);
@@ -63,17 +62,11 @@ public class PersonService {
         if (person == null || child == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if (child.getId() == null || personRepository.findWithParentsById(child.getId()).isEmpty()) {
-            save(child);
-        }
-        Set<Person> set=personRepository.findWithParentsById(child.getId()).get().getParents();
-        if (set.size()>2) {
+        Set<Person> set=child.getParents();
+        if (set.size() != 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if (person.getId() == null || personRepository.findWithChildrenById(person.getId()).isEmpty()) {
-            save(person);
-        }
-        Set<Person> set1=personRepository.findWithChildrenById(person.getId()).get().getChildren();
+        Set<Person> set1=person.getChildren();
         Set<Person> set2= new HashSet<>(set1);
         set2.add(child);
         person.setChildren(set2);
@@ -85,13 +78,7 @@ public class PersonService {
         if (person == null || parent == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if (person.getId() == null || personRepository.findWithParentsById(person.getId()).isEmpty()) {
-            save(person);
-        }
-        if (parent.getId() == null || personRepository.findWithParentsById(parent.getId()).isEmpty()) {
-            save(parent);
-        }
-        Set<Person> set=personRepository.findWithParentsById(person.getId()).get().getParents();
+        Set<Person> set=person.getParents();
         if (set.size() != 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
@@ -106,17 +93,12 @@ public class PersonService {
         if (person == null || child == null) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        if (person.getId() == null || personRepository.findWithChildrenById(person.getId()).isEmpty()) {
-            save(person);
-        }
-        if (child.getId() == null || personRepository.findWithChildrenById(child.getId()).isEmpty()) {
-            save(child);
-        }
-        Set<Person> set=personRepository.findWithChildrenById(person.getId()).get().getChildren();
-        if (set.size()<1) {
+        Set<Person> set=person.getChildren();
+        if (set.size() < 1) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
-        Set<Person> set2=personRepository.findWithParentsById(child.getId()).get().getParents();
+        personRepository.findAll();
+        Set<Person> set2=child.getParents();
         if (set2.size() != 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }

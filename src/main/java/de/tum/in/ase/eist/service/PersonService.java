@@ -63,7 +63,7 @@ public class PersonService {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set=child.getParents();
-        if (set.size() != 2) {
+        if (set.size() >= 2) {
             throw new ResponseStatusException(HttpStatusCode.valueOf(400));
         }
         Set<Person> set1=person.getChildren();
@@ -104,6 +104,6 @@ public class PersonService {
         Set<Person> set1 = new HashSet<>(set);
         set1.remove(child);
         person.setChildren(set1);
-        return person;
+        return save(person);
     }
 }
